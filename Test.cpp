@@ -8,22 +8,34 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <assert.h>
-#include "./include/IntDecl.hpp"
+#include "./include/intdecl.hpp"
 
 
 int main() {
 	/** TASK 1 TESTS **********************************************************/
+	// char
 	IntDecl<0>::RET a = 0;
-	assert(sizeof(a) == sizeof(char));			// char test
+	assert(sizeof(a) == sizeof(char));
+	IntDecl2<0>::RET b = 0;
+	assert(sizeof(b) == sizeof(char));
 
-	IntDecl<65535>::RET b = 65535;
-	assert(sizeof(b) == sizeof(unsigned int));	// unsigned int test
+	// unsigned int
+	IntDecl<65535>::RET c = 65535;
+	assert(sizeof(c) == sizeof(unsigned int));
+	IntDecl2<65535>::RET d = 65535;
+	assert(sizeof(d) == sizeof(unsigned int));
 
-	IntDecl<-32768>::RET c = -32768;
-	assert(sizeof(c) == sizeof(int));			// int test
+	// int
+	IntDecl<-32768>::RET e = -32768;
+	assert(sizeof(e) == sizeof(int));
+	IntDecl2<-32768>::RET f = -32768;
+	assert(sizeof(f) == sizeof(int));
 
-	IntDecl<65536>::RET d = 65536;
-	assert(sizeof(d) == sizeof(long));			// long test
+	// long
+	IntDecl<65536>::RET g = 65536;
+	assert(sizeof(g) == sizeof(long));
+	IntDecl2<65536>::RET h = 65536;
+	assert(sizeof(h) == sizeof(long));
 
 	printf("TASK 1 TESTS: SUCCESS!\n");
 	/** END TASK 1 TESTS ******************************************************/
