@@ -1,5 +1,5 @@
 /*
- * IntDecl.hpp
+ * intdecl.hpp
  * Author: Radu Cotescu (rdc1g10)
  *
  * Part 1: Integer Declarations
@@ -66,10 +66,48 @@ template<> struct TypeSpecifier<LONG> {
 };
 
 /*
- * main template used for declarations
+ * Main template used for declarations.
+ * @param N the number for which we would like to get the type
  */
 template<int N> struct IntDecl {
 	typedef typename TypeSpecifier<Decider<N>::RET>::RET RET;
 };
 
+/*
+ * The classical IF template.
+ */
+template<bool Cond, class Then, class Else> struct IF {
+	typedef Then RET;
+};
+
+/*
+ * Specialization of the IF template.
+ */
+template<class Then, class Else> struct IF<false, Then, Else> {
+	typedef Else RET;
+};
+
+/*
+ * Main template used for declarations.
+ * @param N the number for which we would like to get the type
+ *
+ * more elegant solution than IntDecl;
+ * unadopted initially because trivial code like
+ *
+ * 	int f = 1;
+ *	IF<f == 1, char, unsigned int>::RET g = 1;
+ *
+ *	when testing how the IF template works threw errors like:
+ *	1. ‘f’ cannot appear in a constant-expression
+ *	2. template argument 1 is invalid
+ *	3. expected initializer before ‘g’
+ */
+template<int N> struct IntDecl2 {
+    typedef typename IF<
+    			(N>=0 && N<=255), char, typename IF<
+    				(N>=0 && N<=65535), unsigned int, typename IF<
+    					(N>=-32768 && N<=32767), int, long>::RET
+    				>::RET
+    			>::RET RET;
+};
 #endif /* INTDECL_HPP_ */
