@@ -11,6 +11,7 @@
 #include <iostream>
 #include "include/intdecl.hpp"
 #include "include/expressions.hpp"
+#include "include/integration.hpp"
 using namespace std;
 
 int main() {
@@ -45,8 +46,13 @@ int main() {
 	/** TASK 2 TESTS **********************************************************/
 	Variable x;
 	assert(((x^3) + (x^2) + 1).eval(2.0) == 13);
-
 	printf("TASK 2 TESTS: SUCCESS!\n");
 	/** END TASK 2 TESTS ******************************************************/
+
+	/** TASK 3 TESTS **********************************************************/
+	assert(integrate((x^2) + 2 * x - 3, 0, 5, 5) == 51.25);
+	assert(integrate(Literal(1), 1, 3, 100) == 2);
+	printf("TASK 3 TESTS: SUCCESS!\n");
+	/** END TASK 3 TESTS ******************************************************/
 	exit(0);
 }

@@ -20,7 +20,7 @@
 using namespace std;
 
 /*
- * Class defining Literals.
+ * Class defining Literals (scalars).
  */
 class Literal {
 public:
@@ -41,13 +41,6 @@ public:
 };
 
 /*
- * Helper function.
- */
-template <class Expression> double eval(Expression e) {
-	return e.eval();
-}
-
-/*
  * Expression traits used to convert constants of numerical types to objects
  * of type Literal.
  */
@@ -63,21 +56,8 @@ template <> struct expressionTrait<int> {
 	typedef Literal expressionType;
 };
 
-/*
- * Template defining a unary expression.
- */
-template <class Expression, class UnaryOperation> class UnaryExpression {
-public:
-	UnaryExpression(
-			Expression _expression,
-			UnaryOperation _operation = UnaryOperation()
-	) : expression(_expression), operation(_operation) {}
-	double eval(double d) const {
-		return operation(expression.eval(d));
-	}
-private:
-	typename expressionTrait<Expression>::expressionType expression;
-	UnaryOperation operation;
+template <> struct expressionTrait<float> {
+	typedef Literal expressionType;
 };
 
 /*
