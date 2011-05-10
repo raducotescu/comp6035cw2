@@ -8,8 +8,10 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <assert.h>
-#include "./include/intdecl.hpp"
-
+#include <iostream>
+#include "include/intdecl.hpp"
+#include "include/expressions.hpp"
+using namespace std;
 
 int main() {
 	/** TASK 1 TESTS **********************************************************/
@@ -39,5 +41,12 @@ int main() {
 
 	printf("TASK 1 TESTS: SUCCESS!\n");
 	/** END TASK 1 TESTS ******************************************************/
+
+	/** TASK 2 TESTS **********************************************************/
+	Variable x;
+	assert(((x^3) + (x^2) + 1).eval(2.0) == 13);
+
+	printf("TASK 2 TESTS: SUCCESS!\n");
+	/** END TASK 2 TESTS ******************************************************/
 	exit(0);
 }

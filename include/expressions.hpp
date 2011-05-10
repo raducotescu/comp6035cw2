@@ -15,6 +15,8 @@
  */
 #ifndef EXPRESSIONS_HPP_
 #define EXPRESSIONS_HPP_
+#include <functional>
+#include <math.h>
 using namespace std;
 
 /*
@@ -23,7 +25,7 @@ using namespace std;
 class Literal {
 public:
 	Literal(const double v) : value(v) {}
-	double eval() const {
+	double eval(double) const {
 		return value;
 	}
 private:
@@ -31,16 +33,51 @@ private:
 };
 
 /*
- * Class defining variables.
+ * Class defining double variables.
  */
 class Variable {
-	Variable(const double v) : value(v) {}
-	double eval() const {
-		return value;
+public:
+	double eval(double d) const { return d; }
+};
+
+/*
+ * Helper function.
+ */
+template <class Expression> double eval(Expression e) {
+	return e.eval();
+}
+
+/*
+ * Expression traits used to convert constants of numerical types to objects
+ * of type Literal.
+ */
+template <class Expression> struct expressionTrait {
+	typedef Expression expressionType;
+};
+
+template <> struct expressionTrait<double> {
+	typedef Literal expressionType;
+};
+
+template <> struct expressionTrait<int> {
+	typedef Literal expressionType;
+};
+
+/*
+ * Template defining a unary expression.
+ */
+template <class Expression, class UnaryOperation> class UnaryExpression {
+public:
+	UnaryExpression(
+			Expression _expression,
+			UnaryOperation _operation = UnaryOperation()
+	) : expression(_expression), operation(_operation) {}
+	double eval(double d) const {
+		return operation(expression.eval(d));
 	}
-	;
 private:
-	double& value;
+	typename expressionTrait<Expression>::expressionType expression;
+	UnaryOperation operation;
 };
 
 /*
@@ -53,19 +90,55 @@ public:
 			RHS _rhs,
 			BinaryOperation _operation = BinaryOperation()
 	) : lhs(_lhs), rhs(_rhs), operation(_operation) {}
-	double eval() const {
-		return operation(lhs.eval(), rhs.eval());
+	double eval(double d) const {
+		return operation(lhs.eval(d), rhs.eval(d));
 	}
 private:
-	LHS lhs;
-	RHS rhs;
+	typename expressionTrait<LHS>::expressionType lhs;
+	typename expressionTrait<RHS>::expressionType rhs;
 	BinaryOperation operation;
 };
 
 /*
- * Operator overriding.
+ * Operator + overloading.
  */
-template <class LHS, class RHS> BinaryExpression<LHS, RHS, plus<double> > operator+(LHS lhs, RHS, rhs) {
+template <class LHS, class RHS> BinaryExpression<LHS, RHS, plus<double> > operator+(LHS lhs, RHS rhs) {
 	return BinaryExpression<LHS, RHS, plus<double> >(lhs, rhs);
+}
+
+/*
+ * Operator - overloading.
+ */
+template <class LHS, class RHS> BinaryExpression<LHS, RHS, minus<double> > operator-(LHS lhs, RHS rhs) {
+	return BinaryExpression<LHS, RHS, minus<double> >(lhs, rhs);
+}
+
+/*
+ * Operator * overloading.
+ */
+template <class LHS, class RHS> BinaryExpression<LHS, RHS, multiplies<double> > operator*(LHS lhs, RHS rhs) {
+	return BinaryExpression<LHS, RHS, multiplies<double> >(lhs, rhs);
+}
+
+/*
+ * Operator / overloading.
+ */
+template <class LHS, class RHS> BinaryExpression<LHS, RHS, divides<double> > operator/(LHS lhs, RHS rhs) {
+	return BinaryExpression<LHS, RHS, divides<double> >(lhs, rhs);
+}
+
+/*
+ * Exponentiation function object class.
+ */
+template <class T> struct exponentiation : binary_function <T, T, T> {
+	T operator() (const T& m, const T& n) const {
+		return pow(m, n);
+	}
+};
+/*
+ * Template for defining the exponentiation operation.
+ */
+template <class LHS, class RHS> BinaryExpression<LHS, RHS, exponentiation<double> > operator^(LHS lhs, RHS rhs) {
+	return BinaryExpression<LHS, RHS, exponentiation<double> >(lhs, rhs);
 }
 #endif /* EXPRESSIONS_HPP_ */
