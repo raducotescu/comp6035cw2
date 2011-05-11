@@ -16,8 +16,8 @@
 #ifndef EXPRESSIONS_HPP_
 #define EXPRESSIONS_HPP_
 #include <functional>
-#include <math.h>
 #include <typeinfo>
+#include <math.h>
 using namespace std;
 
 /*
@@ -26,9 +26,21 @@ using namespace std;
 class Literal {
 public:
 	Literal(const double v) : value(v) {}
+
+	/*
+	 * Returns the expression evaluation for a Literal.
+	 * @param dummy value to keep the function's consistency over the
+	 * 		expressions' implementation
+	 */
 	double eval(double) const {
 		return value;
 	}
+
+	/*
+	 * Returns the derivative of a Literal.
+	 * @param dummy value to keep the function's consistency over the
+	 * 		expressions' implementation
+	 */
 	double der(double) const {
 		return 0;
 	}
@@ -41,19 +53,33 @@ private:
  */
 class Variable {
 public:
-	double eval(double d) const { return d; }
-	double der(double d) const { return 1; }
+	/*
+	 * Returns the expression evaluation for a Variable (its value).
+	 * @param d the value for which the variable should be evaluated
+	 */
+	double eval(double d) const {
+		return d;
+	}
+
+	/*
+	 * Returns the derivative of a variable.
+	 * @param d dummy value to keep the function's consistency over the
+	 * 		expressions' implementation
+	 */
+	double der(double d) const {
+		return 1;
+	}
 };
 
 /*
  * Expression traits used to convert constants of numerical types to objects
- * of type Literal.
+ * of type Literal, without changing expressions.
  */
 template <class Expression> struct expressionTrait {
 	typedef Expression expressionType;
 };
 
-template <> struct expressionTrait<double> {
+template <> struct expressionTrait<unsigned int> {
 	typedef Literal expressionType;
 };
 
@@ -62,6 +88,14 @@ template <> struct expressionTrait<int> {
 };
 
 template <> struct expressionTrait<float> {
+	typedef Literal expressionType;
+};
+
+template <> struct expressionTrait<double> {
+	typedef Literal expressionType;
+};
+
+template <> struct expressionTrait<long> {
 	typedef Literal expressionType;
 };
 
@@ -84,9 +118,19 @@ public:
 			RHS _rhs,
 			BinaryOperation _operation = BinaryOperation()
 	) : lhs(_lhs), rhs(_rhs), operation(_operation) {}
+
+	/*
+	 * Returns the result of the expression's operation for a specified value.
+	 * @param d the value for which the expression is evaluated
+	 */
 	double eval(double d) const {
 		return operation(lhs.eval(d), rhs.eval(d));
 	}
+
+	/*
+	 * Returns the derivative of the expression, evaluated for a certain value.
+	 * @param d the value at which the derivative of the expression is evaluated
+	 */
 	double der(double d) const {
 		if (typeid(operation) == typeid(plus<double>)) {
 			return (lhs.der(d) + rhs.der(d));

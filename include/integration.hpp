@@ -21,12 +21,19 @@
 
 #ifndef INTEGRATION_HPP_
 #define INTEGRATION_HPP_
-template<class Expression> double integrate(Expression e, double low, double hi,
+/*
+ * Template function that calculates the definite Integral of an expression.
+ * @param e the expression
+ * @param low the lower limit
+ * @param up the upper limit
+ * @param divisions the number of divisions of the range by which the integral
+ * 		is approximated
+ */
+template<class Expression> double integrate(Expression e, double low, double up,
 		int divisions) {
-	double sum = 0, step = (hi - low) / divisions;
-	for (double i = low + step / 2; i < hi; i += step)
+	double sum = 0, step = (up - low) / divisions;
+	for (double i = low + step / 2; i < up; i += step)
 		sum += e.eval(i);
 	return step * sum;
 }
-
 #endif /* INTEGRATION_HPP_ */

@@ -1,5 +1,5 @@
 /*
- * Test.cpp
+ * test.cpp
  * Author: Radu Cotescu (rdc1g10@soton.ac.uk)
  *
  * Main program for coursework testing.
@@ -8,7 +8,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <assert.h>
-#include <iostream>
 #include "include/intdecl.hpp"
 #include "include/expressions.hpp"
 #include "include/integration.hpp"
@@ -57,8 +56,11 @@ int main() {
 	/** END TASK 3 TESTS ******************************************************/
 
 	/** TASK 4 TESTS **********************************************************/
-	assert(differentiate((2 * x), 2) == 2);
-	assert(differentiate(2 * (x^2), 100) == 400);
+	assert(differentiate(2 * x, 2) == 2);
+	assert(differentiate((x^2), 100) == 200);
+	assert(differentiate((x^2) + x, 1) == 3);
+	assert(differentiate((x^2) - x, 1) == 1);
+	assert(differentiate(((x^2) + 1) / (x - 1), 2) == -1);
 	printf("TASK 4 TESTS: SUCCESS!\n");
 	/** END TASK 4 TESTS ******************************************************/
 	exit(0);

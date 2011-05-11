@@ -24,7 +24,13 @@
 
 #ifndef DIFFERENTIATION_HPP_
 #define DIFFERENTIATION_HPP_
-#include "expressions.hpp"
+/*
+ * Helper template function that calls the der(double) function of an
+ * expression.
+ *
+ * @param e the expression for which the derivative function is calculated
+ * @param d the value in which the derivative of the expression is evaluated
+ */
 template <class Expression> double differentiate(Expression e, double d) {
 	return e.der(d);
 };
