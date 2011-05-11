@@ -1,6 +1,6 @@
 /*
  * intdecl.hpp
- * Author: Radu Cotescu (rdc1g10)
+ * Author: Radu Cotescu (rdc1g10@soton.ac.uk)
  *
  * Part 1: Integer Declarations
  * Write a C++ template meta-program, IntDecl, which accepts an integer value

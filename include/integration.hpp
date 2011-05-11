@@ -1,6 +1,7 @@
 /*
  * integration.hpp
- * Author: Radu Cotescu (rdc1g10)
+ * Author: Radu Cotescu (rdc1g10@soton.ac.uk)
+ *
  * Part 3: Numerical Integration
  * Use the expression templates from Part 2 to write a C++ template which
  * accepts arithmetic expressions and generates code for numerically

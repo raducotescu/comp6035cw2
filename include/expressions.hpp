@@ -1,6 +1,6 @@
 /*
  * expressions.hpp
- * Author: Radu Cotescu (rdc1g10)
+ * Author: Radu Cotescu (rdc1g10@soton.ac.uk)
  *
  * Part 2: Expression Templates
  * Write C++ templates which allow you to use types to represent arithmetic
@@ -17,6 +17,7 @@
 #define EXPRESSIONS_HPP_
 #include <functional>
 #include <math.h>
+#include <typeinfo>
 using namespace std;
 
 /*
@@ -28,6 +29,9 @@ public:
 	double eval(double) const {
 		return value;
 	}
+	double der(double) const {
+		return 0;
+	}
 private:
 	const double value;
 };
@@ -38,6 +42,7 @@ private:
 class Variable {
 public:
 	double eval(double d) const { return d; }
+	double der(double d) const { return 1; }
 };
 
 /*
@@ -61,6 +66,15 @@ template <> struct expressionTrait<float> {
 };
 
 /*
+ * Exponentiation function object class.
+ */
+template <class T> struct exponentiation : binary_function <T, T, T> {
+	T operator() (const T& m, const T& n) const {
+		return pow(m, n);
+	}
+};
+
+/*
  * Template defining a binary expression.
  */
 template <class LHS, class RHS, class BinaryOperation> class BinaryExpression {
@@ -72,6 +86,27 @@ public:
 	) : lhs(_lhs), rhs(_rhs), operation(_operation) {}
 	double eval(double d) const {
 		return operation(lhs.eval(d), rhs.eval(d));
+	}
+	double der(double d) const {
+		if (typeid(operation) == typeid(plus<double>)) {
+			return (lhs.der(d) + rhs.der(d));
+		}
+		else if (typeid(operation) == typeid(minus<double>)) {
+			return (lhs.der(d) - rhs.der(d));
+		}
+		else if (typeid(operation) == typeid(multiplies<double>)) {
+			return (lhs.eval(d) * rhs.der(d) + lhs.der(d) * rhs.eval(d));
+		}
+		else if (typeid(operation) == typeid(divides<double>)) {
+			return ((rhs.eval(d) * lhs.der(d) - lhs.eval(d) * rhs.der(d)) / (rhs^2).eval(d));
+		}
+		else if (typeid(operation) == typeid(exponentiation<double>)) {
+			return (rhs.eval(d) * (lhs^(rhs.eval(d) - 1)).eval(d) * lhs.der(d));
+		}
+		else {
+			assert (false);
+			return 0;
+		}
 	}
 private:
 	typename expressionTrait<LHS>::expressionType lhs;
@@ -107,14 +142,6 @@ template <class LHS, class RHS> BinaryExpression<LHS, RHS, divides<double> > ope
 	return BinaryExpression<LHS, RHS, divides<double> >(lhs, rhs);
 }
 
-/*
- * Exponentiation function object class.
- */
-template <class T> struct exponentiation : binary_function <T, T, T> {
-	T operator() (const T& m, const T& n) const {
-		return pow(m, n);
-	}
-};
 /*
  * Template for defining the exponentiation operation.
  */

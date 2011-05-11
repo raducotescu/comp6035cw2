@@ -1,6 +1,6 @@
 /*
  * Test.cpp
- * Author: Radu Cotescu (rdc1g10)
+ * Author: Radu Cotescu (rdc1g10@soton.ac.uk)
  *
  * Main program for coursework testing.
  */
@@ -12,6 +12,7 @@
 #include "include/intdecl.hpp"
 #include "include/expressions.hpp"
 #include "include/integration.hpp"
+#include "include/differentiation.hpp"
 using namespace std;
 
 int main() {
@@ -54,5 +55,11 @@ int main() {
 	assert(integrate(Literal(1), 1, 3, 100) == 2);
 	printf("TASK 3 TESTS: SUCCESS!\n");
 	/** END TASK 3 TESTS ******************************************************/
+
+	/** TASK 4 TESTS **********************************************************/
+	assert(differentiate((2 * x), 2) == 2);
+	assert(differentiate(2 * (x^2), 100) == 400);
+	printf("TASK 4 TESTS: SUCCESS!\n");
+	/** END TASK 4 TESTS ******************************************************/
 	exit(0);
 }
