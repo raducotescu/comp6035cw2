@@ -2,6 +2,11 @@
  * expressions.hpp
  * Author: Radu Cotescu (rdc1g10@soton.ac.uk)
  *
+ * The implementation is based on an article written by Angelika Langer and
+ * published on her web site at the following address:
+ *
+ * http://www.angelikalanger.com/Articles/Cuj/ExpressionTemplates/ExpressionTemplates.htm
+ *
  * Part 2: Expression Templates
  * Write C++ templates which allow you to use types to represent arithmetic
  * expressions over the four basic operations (addition, subtraction,
